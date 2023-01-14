@@ -39,7 +39,7 @@ http://127.0.0.1:5000/api/add_csv
 В случае успешного запроса, сервис возвращает список разложенных URL, добавленных в базу, а также общий статус обработки файла (количество обрабатываемых ссылок, количество ошибок, количество ссылок, направленных на сохранение в БД).
 Пример ответа:
 ```
-[ { "errors": 1, "links_to_process": 2, "success_additions": 1 }, [ { "domain": "blog", "domain_zone": "miguelgrinberg", "id": 1, "parameters": {}, "path": "/post/handling-file-uploads-with-flask", "protocol": "https", "uuid": "10ac87d5-79c1-4649-a728-b94c5906924a" } ] ]
+[ { "errors": 1, "links_to_process": 2, "success_additions": 1 }, [ { "domain": "blog.miguelgrinberg.com", "domain_zone": "com", "id": 1, "parameters": {}, "path": "/post/handling-file-uploads-with-flask", "protocol": "https", "uuid": "10ac87d5-79c1-4649-a728-b94c5906924a" } ] ]
 ```
 ### GET запрос:
 ```

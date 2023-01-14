@@ -78,8 +78,8 @@ def create_link_model(url: str):
         uuid=str(uuid.uuid4()),
         initial_url=url,
         protocol=url_parts_dict['scheme'],
-        domain=url_parts_dict['netloc'].split('.')[0],
-        domain_zone=url_parts_dict['netloc'].split('.')[1],
+        domain=url_parts_dict['netloc'],
+        domain_zone=url_parts_dict['netloc'].split('.')[-1],
         path=url_parts_dict['path'],
         parameters=parameters
     )
