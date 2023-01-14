@@ -19,7 +19,7 @@ http://127.0.0.1:5000/api/link
 ```
 Сервис возвращает список всех разложенных URL в формате JSON. Пример ответа:
 ```
-[ {"domain": "someshop", "domain_zone": "ru", "id": 7, "parameters": { "page": "1", "perpage": "20" }, "path": "/catalog/iphone", "protocol": "https", "uuid": "97764797-1096-44af-809a-ad500e9c794b" } ]
+[ {"domain": "someshop.ru", "domain_zone": "ru", "id": 7, "parameters": { "page": "1", "perpage": "20" }, "path": "/catalog/iphone", "protocol": "https", "uuid": "97764797-1096-44af-809a-ad500e9c794b" } ]
 ```
 ### POST запрос:
 ```
