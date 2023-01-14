@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Главная{%endblock %}
+{% block content %}
+<h1 class="text-center">Test task</h1>
+<p class="text-center my-4">
+  Форма загрузки ссылок в базу данных
+</p>
+<div class="container">
+  <div class="row my-3">
+    <div class="col">
+    </div>
+    <div class="col-6">
+      <form method="POST" enctype="multipart/form-data">
+        <div>
+          <div>
+            {{ form.csrf_token }}
+            {{ form.link(class="form-control form-control-lg py-2 mb-3", placeholder=form.link.label.text) }}
+            <label>{{ form.csv_file.label.text }}</label>
+            {{ form.csv_file(class="form-control form-control-lg py-2 mb-3") }}
+            <p>
+            {% if form.link.errors %}
+              {% for error in form.link.errors %}
+              <span style="color: red">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+            </p>
+          </div>
+          <div>
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              {% for message in messages %}
+              <p>
+                <span style="color: green">{{ message }}</span>
+              </p>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          </div>
+          <div class="text-center">
+            {{ form.submit(class="btn btn-primary") }}
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+{% endblock %}

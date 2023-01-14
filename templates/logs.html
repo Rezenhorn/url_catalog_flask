@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Логи{%endblock %}
+{% block content %}
+<h1 class="text-center">Последние логи</h1>
+<hr>
+<div class="container">
+  {% for string in logs %}
+    <p>{{ string }}</p>
+  {% endfor %}
+</div>
+{% endblock %}
