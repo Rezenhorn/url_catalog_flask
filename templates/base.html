@@ -9,11 +9,12 @@
 </head>
 
 <body>
+  {% include "header.html" %}
   <main>
-    {% include "header.html" %}
     <section class="container my-5 px-4">
       {% block content %}{% endblock content %}
     </section>
   </main>
+  {% include "footer.html" %}
 </body>
 </html>

@@ -13,13 +13,12 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from forms import LinkForm
 
-SECRET_KEY = os.urandom(32)
 MAX_LOGFILE_SIZE_IN_BYTES = 2 ** 20  # 1 Мегабайт
 NUMBER_OF_LOG_LINES = 20
+SECRET_KEY = os.urandom(32)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
-app.config["UPLOAD_FOLDER"] = "static/"
 
 client = app.test_client()
 
@@ -66,7 +65,7 @@ def create_link_model(url: str):
         raise ValueError(f'URL {url} уже есть в БД')
     url_parced = urlparse(url)
     if not all([url_parced.scheme, url_parced.netloc]):
-        raise ValueError('"url" не соответствует формату ссылки на веб-ресурс')
+        raise ValueError(f'"{url}" не соответствует формату url.')
     url_parts_dict = dict(url_parced._asdict())
     parameters = {}
     if url_parts_dict['query']:
@@ -92,11 +91,11 @@ def add_single_url(url: str):
     new_link = create_link_model(url)
     session.add(new_link)
     session.commit()
-    app.logger.info(f'URL {url} добавлен в БД.')
+    app.logger.info(f'URL "{url}" добавлен в БД.')
     return new_link
 
 
-def add_link_to_db_from_file(file):
+def add_link_to_db_from_file(file) -> dict:
     '''Добавляет url из csv файла в БД, логгирует результат
     и возвращает словарь с числом обработанных url, успешных добавлений
     и ошибок.'''
@@ -160,7 +159,7 @@ def index_view():
     file = form.data.get('csv_file')
     if file:
         result = add_link_to_db_from_file(file)
-        flash(f'{result["success_additions"]} URL из csv-файла добавлено в БД.')
+        flash(f'{result["success_additions"]} URL из csv-файла добавлено в БД')
         return (render_template('add_link.html', form=form),
                 HTTPStatus.CREATED)
     if form.validate_on_submit():
