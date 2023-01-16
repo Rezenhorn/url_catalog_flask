@@ -11,41 +11,7 @@
 - Flask 2.2
 - SQLAlchemy
 - Bootstrap5
-
-## Эндпоинты API:
-### GET запрос:
-```
-http://127.0.0.1:5000/api/link
-```
-Сервис возвращает список всех разложенных URL в формате JSON. Пример ответа:
-```
-[ {"domain": "someshop.ru", "domain_zone": "ru", "id": 7, "parameters": { "page": "1", "perpage": "20" }, "path": "/catalog/iphone", "protocol": "https", "uuid": "97764797-1096-44af-809a-ad500e9c794b" } ]
-```
-### POST запрос:
-```
-http://127.0.0.1:5000/api/link
-```
-В теле запроса должна передаваться ссылка в формате JSON. Ключ: 'url'. Например:
-```
-{"url": "https://someshop.ru/catalog/iphone?page=1&perpage=20"}
-```
-В случае успешного запроса, сервис возвращает разложенную ссылку URL в формате JSON.
-
-### POST запрос:
-```
-http://127.0.0.1:5000/api/load_csv
-```
-Запрос должен содержать в себе csv файл с перечнем ссылок (формат файла - каждая новая строка одна ссылка).
-В случае успешного запроса, сервис возвращает список разложенных URL, добавленных в базу, а также общий статус обработки файла (количество обрабатываемых ссылок, количество ошибок, количество ссылок, направленных на сохранение в БД).
-Пример ответа:
-```
-[ { "errors": 1, "links_to_process": 2, "success_additions": 1 }, [ { "domain": "blog.miguelgrinberg.com", "domain_zone": "com", "id": 1, "parameters": {}, "path": "/post/handling-file-uploads-with-flask", "protocol": "https", "uuid": "10ac87d5-79c1-4649-a728-b94c5906924a" } ] ]
-```
-### GET запрос:
-```
-http://127.0.0.1:5000/api/get_log
-```
-Возвращает последние 20 строчек лога.
+- Docker
 
 ## Запуск проекта локально:
 
@@ -53,22 +19,55 @@ http://127.0.0.1:5000/api/get_log
 ```
 git clone https://github.com/Rezenhorn/test_task_flask.git
 ```
-### Cоздать и активировать виртуальное окружение:
+### Убедиться, что на компьютере установлен и запущен Docker.
+### Собрать и запустить контейнер из корневой папки приложения:
 ```
-python -m venv venv
-```
-```
-source venv/scripts/activate
-```
-### Установить зависимости из файла requirements.txt:
-```
-python -m pip install --upgrade pip
+docker build -t application:latest .
 ```
 ```
-pip install -r requirements.txt
+docker run --name microblog -d -p 8000:5000 --rm application:latest
 ```
-### Запустить проект:
+Проект станет доступен по адресу http://localhost:8000/
+
+## Эндпоинты API:
+### GET запрос:
 ```
-python app.py
+http://localhost:8000/api/link
 ```
-Проект станет доступен по адресу http://127.0.0.1:5000/
+Сервис возвращает список всех разложенных URL в формате JSON. Пример ответа:
+```
+[ {"domain": "someshop.ru", "domain_zone": "ru", "id": 7, "parameters": { "page": "1", "perpage": "20" }, "path": "/catalog/iphone", "protocol": "https", "uuid": "97764797-1096-44af-809a-ad500e9c794b" } ]
+```
+Также предусмотрена выборка по id, uuid и domain_zone. В таком случае, эндпоинт может выглятеть так:
+```
+http://localhost:8000/api/link?id=2
+```
+### POST запрос:
+```
+http://localhost:8000/api/link
+```
+В теле запроса должна передаваться ссылка в формате JSON. Ключ: 'url'. Например:
+```
+{"url": "https://someshop.ru/catalog/iphone?page=1&perpage=20"}
+```
+В случае успешного запроса, сервис возвращает разложенную ссылку URL в формате JSON:
+```
+{"domain":"someshop.ru","domain_zone":"ru","id":1,"parameters":{"page":"1","perpage":"20"},"path":"/catalog/iphone","protocol":"https","uuid":"14dd3728-4519-4c34-bdf6-ee4ef7b37bcd"}
+```
+### POST запрос:
+```
+http://localhost:8000/api/load_csv
+```
+Запрос должен содержать в себе csv файл с перечнем ссылок (формат файла - каждая новая строка одна ссылка).
+В случае успешного запроса, сервис возвращает список разложенных URL, добавленных в базу, а также общий статус обработки файла (количество обрабатываемых ссылок, количество ошибок, количество ссылок, направленных на сохранение в БД).
+Для примера, можете использовать заготовленный файл example.csv в папке app.
+
+Пример ответа:
+```
+[ { "errors": 1, "links_to_process": 2, "success_additions": 1 }, [ { "domain": "blog.miguelgrinberg.com", "domain_zone": "com", "id": 1, "parameters": {}, "path": "/post/handling-file-uploads-with-flask", "protocol": "https", "uuid": "10ac87d5-79c1-4649-a728-b94c5906924a" } ]
+```
+### GET запрос:
+```
+http://localhost:8000/api/get_log
+```
+Возвращает последние 20 строчек лога.

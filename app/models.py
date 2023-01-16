@@ -1,12 +1,11 @@
-from app import Base
-import sqlalchemy as db
+from app import db
 
 
-class Link(Base):
+class Link(db.Model):
     __tablename__ = 'links'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     initial_url = db.Column(db.String(200), nullable=False, unique=True)
-    uuid = db.Column(db.String(36), nullable=False)
+    uuid = db.Column(db.String(36), nullable=False, unique=True)
     protocol = db.Column(db.String(200), nullable=False)
     domain = db.Column(db.String(200), nullable=False)
     domain_zone = db.Column(db.String(200), nullable=False)

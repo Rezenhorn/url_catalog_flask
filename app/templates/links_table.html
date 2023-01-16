@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Таблица с ссылками{%endblock %}
+{% block content %}
+<h1 class="text-center">База данных с ссылками</h1>
+<hr>
+<div class="container">
+  <form method="POST" enctype="multipart/form-data">
+    <div class="row align-items-start">
+      {{ form.csrf_token }}
+      <div class="col">
+        {{ form.domain(class="form-control form-control-lg py-2 mb-3", placeholder=form.domain.label.text) }}
+        <p>
+          {% if form.domain.errors %}
+            {% for error in form.domain.errors %}
+            <span style="color: red">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+        </p>
+      </div>
+      <div class="col">
+        {{ form.domain_zone(class="form-control form-control-lg py-2 mb-3", placeholder=form.domain_zone.label.text) }}
+        <p>
+          {% if form.domain_zone.errors %}
+            {% for error in form.domain.errors %}
+            <span style="color: red">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+        </p>
+      </div>
+    </div>
+    <div class="text-center my-2">
+      {{ form.submit(class="btn btn-primary") }}
+    </div>
+    <div class="text-center">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+          <p>
+            <span style="color: {% if category == 'error' %}red{% else %}green{% endif %}">{{ message }}</span>
+          </p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+  </form>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr>
+          <th scope="col" style="padding-left: 10px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+            </svg>
+          </th>
+          <th scope="col">id</th>
+          <th scope="col">protocol</th>
+          <th scope="col">domain</th>
+          <th scope="col">domain zone</th>
+          <th scope="col">path</th>
+          <th scope="col">parameters</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        {% for url in links %}
+        <tr>
+          <td><a type="button" class="btn-close" aria-label="Close" href="{{ url_for('delete_link', id=url.id) }}"></a></td>
+          <td>{{ url.id }}</td>
+          <td>{{ url.protocol }}</td>
+          <td>{{ url.domain }}</td>
+          <td>{{ url.domain_zone }}</td>
+          <td>{{ url.path }}</td>
+          <td>{% if url.parameters %}{{ url.parameters }}{% else %} - {% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <nav aria-label="Page navigation" class="my-4">
+    <ul class="pagination">
+      <li class="page-item">
+        {% if links.has_prev %}<a class="page-link" href="{{ url_for('links_table_view', page=links.prev_num) }}">&lt;&lt; Предыдущая страница </a>{% else %}{% endif %}
+      </li>
+      <li class="page-item">
+        {% if links.has_next %}<a class="page-link" href="{{ url_for('links_table_view', page=links.next_num) }}">Следующая страница &gt;&gt;</a>{% else %}{% endif %}
+      </li>
+    </ul>
+  </nav>
+</div>
+{% endblock %}
