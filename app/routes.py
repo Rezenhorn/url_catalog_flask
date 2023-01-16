@@ -68,7 +68,7 @@ def delete_link(id):
     db.session.delete(Link.query.get_or_404(id))
     db.session.commit()
     flash('URL удален из ДБ.')
-    return redirect(url_for('links_table_view'), 301)
+    return redirect(url_for('links_table_view'), HTTPStatus.MOVED_PERMANENTLY)
 
 
 @app.route('/logs', methods=['GET'])
