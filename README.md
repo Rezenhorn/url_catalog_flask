@@ -17,7 +17,7 @@
 
 ### Клонировать репозиторий и перейти в него:
 ```
-git clone https://github.com/Rezenhorn/test_task_flask.git
+git clone https://github.com/Rezenhorn/test_task_flask.git --branch stage_2
 ```
 ### Убедиться, что на компьютере установлен и запущен Docker.
 ### Собрать и запустить контейнер из корневой папки приложения:
@@ -25,9 +25,11 @@ git clone https://github.com/Rezenhorn/test_task_flask.git
 docker build -t application:latest .
 ```
 ```
-docker run --name microblog -d -p 8000:5000 --rm application:latest
+docker run --name application -d -p 8000:5000 --rm application:latest
 ```
 Проект станет доступен по адресу http://localhost:8000/
+
+Возможно возникновение ошибки при запуске контейнера: сбиваются окончания строк (EOL) у файла boot.sh. Необходимо в текстовом редакторе (например, Notepad++) изменить формат EOL: Edit > EOL Conversion > Unix/OSX Format.
 
 ## Эндпоинты API:
 ### GET запрос:
