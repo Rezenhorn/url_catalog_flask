@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Войти{%endblock %}
+{% block content %}
+<h1 class="text-center">Login</h1>
+<div class="container text-center">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <hr>
+      {% for category, message in messages %}
+      <p>
+        <span style="color: {% if category == 'error' %}red{% else %}green{% endif %}">{{ message }}</span>
+      </p>
+      {% endfor %}
+    <hr>
+    {% endif %}
+  {% endwith %}
+</div>
+<div class="container">
+  <div class="row my-3">
+    <div class="col">
+    </div>
+    <div class="col-6">
+      <form action="" method="post" novalidate>
+        {{ form.csrf_token }}
+        <p>
+          {{ form.username.label(class="form-label") }}
+          {{ form.username(class="form-control form-control-lg py-2 mb-3") }}
+          {% for error in form.username.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}
+        </p>
+        <p>
+          {{ form.password.label(class="form-label") }}
+          {{ form.password(class="form-control form-control-lg py-2 mb-3") }}
+          {% for error in form.password.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}
+        </p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label(class="form-label") }}</p>
+        <div class="text-center">
+          {{ form.submit(class="btn btn-primary") }}
+        </div>
+      </form>
+      <p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+{% endblock %}
