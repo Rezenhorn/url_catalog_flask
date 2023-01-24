@@ -14,22 +14,22 @@ from .utils import add_links_to_db_from_file, add_link_to_db
 @app.route('/', methods=['GET', 'POST'])
 def index_view():
     form = LinkForm()
-    file = form.data.get('csv_file')
-    if file:
-        result = add_links_to_db_from_file(file)
-        flash(f'Обработано {result["links_to_process"]} URL из csv-файла. '
-              f'{result["success_additions"]} URL успешно добавлено в БД.')
-        return (render_template('add_link.html', form=form),
-                HTTPStatus.CREATED)
     if form.validate_on_submit():
-        url = form.link.data
-        form.link.data = ''
         try:
+            file = form.data.get('csv_file')
+            if file:
+                result = add_links_to_db_from_file(file)
+                flash(f'Обработано {result["links_to_process"]} URL из файла. '
+                      f'{result["success_additions"]} URL добавлено в БД.')
+                return (render_template('add_link.html', form=form),
+                        HTTPStatus.CREATED)
+            url = form.link.data
+            form.link.data = ''
             add_link_to_db(url)
             flash('URL добавлен в БД.')
             return (render_template('add_link.html', form=form),
                     HTTPStatus.CREATED)
-        except ValueError as error:
+        except Exception as error:
             flash(f'Ошибка: {error}.', 'error')
     return render_template('add_link.html', form=form), HTTPStatus.OK
 
@@ -74,10 +74,5 @@ def delete_link(id):
 @app.route('/logs', methods=['GET'])
 def logs_view():
     with open('app/log.txt', encoding='utf-8') as file:
-        logs = list(deque(file, NUMBER_OF_LOG_LINES))
+        logs = reversed(list(deque(file, NUMBER_OF_LOG_LINES)))
         return render_template('logs.html', logs=logs), HTTPStatus.OK
-
-
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template('404.html'), HTTPStatus.NOT_FOUND

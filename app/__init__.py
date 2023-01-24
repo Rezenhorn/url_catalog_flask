@@ -8,4 +8,4 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from . import api_routes, routes, models, logging
+from . import api_routes, routes, error_handlers, logging, models

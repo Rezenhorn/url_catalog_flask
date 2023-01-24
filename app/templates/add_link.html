@@ -20,7 +20,12 @@
             <p>
             {% if form.link.errors %}
               {% for error in form.link.errors %}
-              <span style="color: red">{{ error }}</span>
+                <span style="color: red">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+            {% if form.csv_file.errors %}
+              {% for error in form.csv_file.errors %}
+                <span style="color: red">{{ error }}</span>
               {% endfor %}
             {% endif %}
             </p>

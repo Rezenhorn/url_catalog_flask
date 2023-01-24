@@ -13,7 +13,7 @@ def create_link_model(url: str) -> Link:
         raise ValueError(f'URL {url} уже есть в БД')
     url_parced = urlparse(url)
     if not all([url_parced.scheme, url_parced.netloc]):
-        raise ValueError(f'"{url}" не соответствует формату url.')
+        raise ValueError(f'"{url}" не соответствует формату URL')
     url_parts_dict = dict(url_parced._asdict())
     parameters = {}
     if url_parts_dict['query']:

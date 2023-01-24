@@ -6,6 +6,7 @@ from flask import jsonify, request
 from app import app
 from config import NUMBER_OF_LOG_LINES
 
+from .error_handlers import APIError
 from .models import Link
 from .utils import add_links_to_db_from_file, add_link_to_db
 
@@ -14,17 +15,21 @@ from .utils import add_links_to_db_from_file, add_link_to_db
 def add_link():
     data = request.get_json()
     if not data:
-        raise KeyError('Отсутствует тело запроса.')
+        raise APIError('Отсутствует тело запроса.')
     url = data.get('url')
     if not url:
-        raise KeyError('В запросе отсутствует URL.')
+        raise APIError('В запросе отсутствует URL.')
     new_link = add_link_to_db(url)
     return jsonify(new_link.to_dict()), HTTPStatus.CREATED
 
 
 @app.route('/api/load_csv', methods=['POST'])
 def load_csv():
-    file = request.files['file']
+    file = request.files.get('file')
+    if not file:
+        raise APIError('В запросе отсутствует файл.')
+    if file.filename.rsplit('.', 1)[1] != 'csv':
+        raise APIError('Допустимы только .csv файлы.')
     result = add_links_to_db_from_file(file)
     return (jsonify([{'links_to_process': result['links_to_process'],
                       'errors': result['total_errors'],
@@ -37,6 +42,9 @@ def load_csv():
 def get_list():
     query = Link.query
     if request.args:
+        for param in request.args.keys():
+            if param not in ('uuid', 'id', 'domain_zone'):
+                raise APIError('Недопустимый ключ поиска.')
         query = query.filter_by(**request.args)
     return jsonify([link.to_dict() for link in query.all()]), HTTPStatus.OK
 
