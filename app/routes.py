@@ -8,7 +8,7 @@ from werkzeug.urls import url_parse
 from app import app, db
 from config import LINKS_PER_PAGE, NUMBER_OF_LOG_LINES
 
-from .forms import LinkForm, LoginForm, RegistrationForm, SearchForm
+from .forms import CSVForm, LinkForm, LoginForm, RegistrationForm, SearchForm
 from .models import Link, User
 from .utils import add_links_to_db_from_file, add_link_to_db
 
@@ -55,24 +55,28 @@ def logout():
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def index_view():
-    form = LinkForm()
-    if form.validate_on_submit():
-        try:
-            file = form.data.get('csv_file')
+    form_link = LinkForm()
+    form_file = CSVForm()
+    try:
+        if form_file.validate_on_submit():
+            file = form_file.data.get('csv_file')
             if file:
                 result = add_links_to_db_from_file(file)
                 flash(f'Обработано {result["links_to_process"]} URL из файла. '
                       f'{result["success_additions"]} URL добавлено в БД.')
-                return (render_template('add_link.html', form=form),
-                        HTTPStatus.CREATED)
-            url = form.link.data
-            form.link.data = ''
+                return render_template(
+                    'add_link.html', form_link=form_link, form_file=form_file)
+        if form_link.validate_on_submit():
+            url = form_link.link.data
+            form_link.link.data = ''
             add_link_to_db(url)
             flash('URL добавлен в БД.')
-            return render_template('add_link.html', form=form)
-        except Exception as error:
-            flash(f'Ошибка: {error}.', 'error')
-    return render_template('add_link.html', form=form)
+            return render_template(
+                'add_link.html', form_link=form_link, form_file=form_file)
+    except Exception as error:
+        flash(f'Ошибка: {error}.', 'error')
+    return render_template(
+        'add_link.html', form_link=form_link, form_file=form_file)
 
 
 @app.route('/links_table', methods=['GET', 'POST'])

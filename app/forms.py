@@ -6,9 +6,9 @@ from wtforms import (PasswordField,
                      SubmitField,
                      URLField)
 from wtforms.validators import (DataRequired,
+                                Optional,
                                 Email,
                                 EqualTo,
-                                Optional,
                                 ValidationError,
                                 URL)
 
@@ -20,10 +20,14 @@ class LinkForm(FlaskForm):
         'Ccылка',
         validators=[Optional(), URL(message='Неверный URL')]
     )
+    submit = SubmitField('Отправить')
+
+
+class CSVForm(FlaskForm):
     csv_file = FileField(
         'CSV файл с ссылками',
         validators=[
-            Optional(), FileAllowed(['csv'], 'Разрешены только .csv файлы.')
+            Optional(), FileAllowed(['csv'], 'Разрешены только .csv файлы')
         ]
     )
     submit = SubmitField('Отправить')
