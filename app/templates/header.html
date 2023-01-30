@@ -29,17 +29,22 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="nav nav-pills">
           {% endif %}
+          {% if current_user.is_anonymous %}
           <li class="nav-item">
-            {% if current_user.is_anonymous %}
             <a class="nav-link" href="{{ url_for('login') }}">
-              Login
+              Войти
             </a>
-            {% else %}
-            <a class="nav-link" href="{{ url_for('logout') }}">
-              Logout
-            </a>
-            {% endif %}
           </li>
+          {% else %}
+          <span class="navbar-text">
+            Привет, <b>{{ current_user.username }}</b>!
+          </span>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">
+              Выйти
+            </a>
+          </li>
+          {% endif %}
         </ul>
       </div>
     </div>
