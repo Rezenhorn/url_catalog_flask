@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Главная{%endblock %}
+{% block content %}
+<h1 class="text-center">Test task</h1>
+<p class="text-center my-4">
+  Форма загрузки ссылок в базу данных
+</p>
+<div class="container">
+  <div class="row my-3">
+    <div class="col">
+    </div>
+    <div class="col-6">
+      <form method="POST" enctype="multipart/form-data">
+        {{ form_link.csrf_token }}
+        {{ form_link.link(class="form-control form-control-lg py-2 mb-3", placeholder=form_link.link.label.text) }}
+        <div class="text-center">
+          {{ form_link.submit(class="btn btn-primary") }}
+        </div>
+        <p>
+          {% if form_link.link.errors %}
+            {% for error in _link.link.errors %}
+              <span style="color: red">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+        </p>
+      </form>
+      <form method="POST" enctype="multipart/form-data">
+        {{ form_file.csrf_token }}
+        <label>{{ form_file.csv_file.label(class="form-label") }}</label>
+        {{ form_file.csv_file(class="form-control form-control-lg py-2 mb-3") }}
+        <div class="text-center">
+          {{ form_file.submit(class="btn btn-primary") }}
+        </div>
+        <p>
+        {% if form_file.csv_file.errors %}
+          {% for error in form_file.csv_file.errors %}
+            <span style="color: red">{{ error }}</span>
+          {% endfor %}
+        {% endif %}
+        </p>
+      </form>
+      <div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+            <p>
+              <span style="color: {% if category == 'error' %}red{% else %}green{% endif %}">{{ message }}</span>
+            </p>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+{% endblock %}
