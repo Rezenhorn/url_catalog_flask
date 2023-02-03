@@ -10,17 +10,17 @@
           {% if current_user.is_anonymous %}
           {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('index_view') }}">
+            <a class="nav-link" href="{{ url_for('main.index_view') }}">
               Главная
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('links_table_view') }}">
+            <a class="nav-link" href="{{ url_for('main.links_table_view') }}">
               Все ссылки
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('logs_view') }}">
+            <a class="nav-link" href="{{ url_for('main.logs_view') }}">
               Логи
             </a>
           </li>
@@ -31,7 +31,7 @@
           {% endif %}
           {% if current_user.is_anonymous %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('login') }}">
+            <a class="nav-link" href="{{ url_for('auth.login') }}">
               Войти
             </a>
           </li>
@@ -40,7 +40,7 @@
             Привет, <b>{{ current_user.username }}</b>!
           </span>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('logout') }}">
+            <a class="nav-link" href="{{ url_for('auth.logout') }}">
               Выйти
             </a>
           </li>

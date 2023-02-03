@@ -3,8 +3,8 @@ from http import HTTPStatus
 from flask import g
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 
-from .models import User
-from .error_handlers import APIError
+from ..models import User
+from app.errors.error_handlers import APIError
 
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()

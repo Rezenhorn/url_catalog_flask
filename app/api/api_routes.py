@@ -3,16 +3,17 @@ from http import HTTPStatus
 
 from flask import g, jsonify, request
 
-from app import app, db
+from app import db
+from app.api import bp
 from config import NUMBER_OF_LOG_LINES
 
-from .auth import basic_auth, token_auth
-from .error_handlers import APIError
-from .models import Link, User
-from .utils import add_links_to_db_from_file, add_link_to_db
+from app.auth.auth import basic_auth, token_auth
+from app.errors.error_handlers import APIError
+from app.models import Link, User
+from app.utils import add_links_to_db_from_file, add_link_to_db
 
 
-@app.route('/api/create_user', methods=['POST'])
+@bp.route('/create_user', methods=['POST'])
 def create_user():
     data = request.get_json() or {}
     if 'username' not in data or 'email' not in data or 'password' not in data:
@@ -29,7 +30,7 @@ def create_user():
     return response, HTTPStatus.CREATED
 
 
-@app.route('/api/tokens', methods=['POST'])
+@bp.route('/tokens', methods=['POST'])
 @basic_auth.login_required
 def get_token():
     token = g.current_user.get_token()
@@ -37,7 +38,7 @@ def get_token():
     return jsonify({'token': token})
 
 
-@app.route('/api/link', methods=['POST'])
+@bp.route('/link', methods=['POST'])
 @token_auth.login_required
 def add_link():
     data = request.get_json()
@@ -50,7 +51,7 @@ def add_link():
     return jsonify(new_link.to_dict()), HTTPStatus.CREATED
 
 
-@app.route('/api/load_csv', methods=['POST'])
+@bp.route('/load_csv', methods=['POST'])
 @token_auth.login_required
 def load_csv():
     file = request.files.get('file')
@@ -66,7 +67,7 @@ def load_csv():
             HTTPStatus.CREATED)
 
 
-@app.route('/api/link', methods=['GET'])
+@bp.route('/link', methods=['GET'])
 @token_auth.login_required
 def get_list():
     query = Link.query
@@ -78,8 +79,8 @@ def get_list():
     return jsonify([link.to_dict() for link in query.all()]), HTTPStatus.OK
 
 
-@app.route('/api/get_log', methods=['GET'])
+@bp.route('/get_log', methods=['GET'])
 @token_auth.login_required
 def get_log():
-    with open('app/log.txt', encoding='utf-8') as file:
+    with open('app/application.log', encoding='utf-8') as file:
         return jsonify(list(deque(file, NUMBER_OF_LOG_LINES))), HTTPStatus.OK

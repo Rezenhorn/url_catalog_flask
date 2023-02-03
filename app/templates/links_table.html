@@ -63,7 +63,7 @@
       <tbody class="table-group-divider">
         {% for url in links %}
         <tr>
-          <td><a type="button" class="btn-close" aria-label="Close" href="{{ url_for('delete_link', id=url.id) }}"></a></td>
+          <td><a type="button" class="btn-close" aria-label="Close" href="{{ url_for('main.delete_link', id=url.id) }}"></a></td>
           <td>{{ url.id }}</td>
           <td>{{ url.protocol }}</td>
           <td>{{ url.domain }}</td>
@@ -78,10 +78,10 @@
   <nav aria-label="Page navigation" class="my-4">
     <ul class="pagination">
       <li class="page-item">
-        {% if links.has_prev %}<a class="page-link" href="{{ url_for('links_table_view', page=links.prev_num) }}">&lt;&lt; Предыдущая страница </a>{% else %}{% endif %}
+        {% if links.has_prev %}<a class="page-link" href="{{ url_for('main.links_table_view', page=links.prev_num) }}">&lt;&lt; Предыдущая страница </a>{% else %}{% endif %}
       </li>
       <li class="page-item">
-        {% if links.has_next %}<a class="page-link" href="{{ url_for('links_table_view', page=links.next_num) }}">Следующая страница &gt;&gt;</a>{% else %}{% endif %}
+        {% if links.has_next %}<a class="page-link" href="{{ url_for('main.links_table_view', page=links.next_num) }}">Следующая страница &gt;&gt;</a>{% else %}{% endif %}
       </li>
     </ul>
   </nav>

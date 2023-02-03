@@ -3,8 +3,8 @@ from urllib.parse import urlparse
 
 from app import db
 
-from .logging import logger
-from .models import Link
+from flask import current_app
+from app.models import Link
 
 
 def create_link_model(url: str) -> Link:
@@ -39,7 +39,7 @@ def add_link_to_db(url: str) -> Link:
     new_link = create_link_model(url)
     db.session.add(new_link)
     db.session.commit()
-    logger.info(f'URL "{url}" добавлен в БД.')
+    current_app.logger.info(f'URL "{url}" добавлен в БД.')
     return new_link
 
 
