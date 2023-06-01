@@ -109,7 +109,7 @@ http://localhost:8000/api/load_csv
 
 Пример ответа:
 
-```
+```json
 [{
   "errors": 1, 
   "links_to_process": 2, 
