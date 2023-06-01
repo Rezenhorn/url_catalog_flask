@@ -26,8 +26,7 @@ def create_user():
     user.from_dict(data, new_user=True)
     db.session.add(user)
     db.session.commit()
-    response = jsonify(user.to_dict())
-    return response, HTTPStatus.CREATED
+    return jsonify(user.to_dict()), HTTPStatus.CREATED
 
 
 @bp.route('/tokens', methods=['POST'])
